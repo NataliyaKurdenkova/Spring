@@ -17,8 +17,10 @@ public List<Product> findAll(){
 public void update(Product product){
     productMap.put(product.getId(),product);
 }*/
-
-
+// поиск продукта по ID
+public Product findByID(long id){
+    return productMap.get(id);
+}
   /* если id указан, то мы просто обновляем, если нет, то генерируем id  и добавляем*/
 
 public void save(Product product){

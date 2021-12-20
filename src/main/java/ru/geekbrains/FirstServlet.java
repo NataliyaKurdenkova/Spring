@@ -3,13 +3,15 @@ package ru.geekbrains;
 import javax.servlet.*;
 import javax.servlet.annotation.WebServlet;
 import java.io.IOException;
+
 @WebServlet(urlPatterns = "/first_servlet")
 public class FirstServlet implements Servlet {
 
-private ServletConfig servletConfig;
+    private ServletConfig servletConfig;
+
     @Override
     public void init(ServletConfig servletConfig) throws ServletException {
-this.servletConfig=servletConfig;
+        this.servletConfig = servletConfig;
     }
 
     @Override
@@ -19,7 +21,8 @@ this.servletConfig=servletConfig;
 
     @Override
     public void service(ServletRequest servletRequest, ServletResponse servletResponse) throws ServletException, IOException {
-servletResponse.getWriter().println("<h1> hello</h1>");
+
+        servletResponse.getWriter().println("<h1> Привет !!!</h1>");
     }
 
     @Override

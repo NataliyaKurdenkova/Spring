@@ -9,6 +9,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @WebServlet(urlPatterns = "/product")
@@ -17,37 +20,82 @@ public class ProductServlet extends HttpServlet {
 
     @Override
     public void init() throws ServletException {
-        productRepository=(ProductRepository) getServletContext().getAttribute("productRepository");
+        productRepository = (ProductRepository) getServletContext().getAttribute("productRepository");
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        List<Product> products = productRepository.findAll();
 
-        resp.getWriter().println("<table>");
-        resp.getWriter().println("<tr>");
-        resp.getWriter().println("<th>ID</th>");
-        //resp.getWriter().println("Id");
-        //resp.getWriter().println("</th>");
-        resp.getWriter().println("<th>Name</th>");
-       // resp.getWriter().println("Name");
-       // resp.getWriter().println("</th>");
-        resp.getWriter().println("</tr>");
+        PrintWriter wr = resp.getWriter();
 
-        for (Product ls : products) {
-            resp.getWriter().println("<tr>");
-            resp.getWriter().println("<td>");
-            resp.getWriter().println(ls.getId());
-            resp.getWriter().println("</td>");
+        if(req.getPathInfo()==null) {
+            List<Product> products = productRepository.findAll();
 
-            resp.getWriter().println("<td>");
-            resp.getWriter().println(ls.getName());
-            resp.getWriter().println("</td>");
-            resp.getWriter().println("</tr>");
+            wr.println("<table>");
+            wr.println("<tr>");
+            wr.println("<th>ID</th>");
+
+            wr.println("<th>Name</th>");
+
+            wr.println("<th>Cost</th>");
+            wr.println("</tr>");
+
+
+            for (Product ls : products) {
+                wr.println("<tr>");
+                wr.println("<td>");
+                wr.println(ls.getId());
+                wr.println("</td>");
+
+
+                wr.println("<td>");
+                String urlProd=req.getContextPath()+req.getServletPath()+"/"+ls.getId();
+                wr.println("<a href='"+urlProd+"'>"+ls.getName()+"</a>");
+                wr.println("</td>");
+
+
+                wr.println("<td>");
+                wr.println(ls.getCost());
+                wr.println("</td>");
+                wr.println("</tr>");
+            }
+
+
+            wr.println("</table>");
+        }else{
+            if(req.getPathInfo()=="/5") {
+                //String pathInfo=req.getPathInfo();
+                // String[] tk = pathInfo.split("\\s", 1);
+                long id = 5L;
+                // id = (long) tk;
+
+                Product pr = productRepository.findByID(id);
+                wr.println("<table>");
+                wr.println("<tr>");
+                wr.println("<th>ID</th>");
+
+                wr.println("<th>Name</th>");
+
+                wr.println("<th>Cost</th>");
+                wr.println("</tr>");
+
+
+                wr.println("<tr>");
+                wr.println("<td>");
+                wr.println(pr.getId());
+                wr.println("</td>");
+
+                wr.println("<td>");
+                wr.println(pr.getName());
+                wr.println("</td>");
+
+
+                wr.println("<td>");
+                wr.println(pr.getCost());
+                wr.println("</td>");
+                wr.println("</tr>");
+            }
         }
-
-
-        resp.getWriter().println("</table>");
 
     }
 }
